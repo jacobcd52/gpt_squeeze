@@ -24,7 +24,7 @@ from squeeze.score import score_text  # noqa: E402
 SYSTEM = """You are an autonomous research and engineering agent working in a Linux container for a researcher at a research lab. You operate for many hours without supervision through a command-line harness.
 
 Environment
-- You have a `shell` tool that runs bash commands in your workspace ({workdir}). Python 3 with numpy, scipy and scikit-learn is available; you may pip install other packages. Commands time out after the given timeout (default 120 s, max 900 s); run longer jobs in the background with nohup and poll them.
+- You have a `shell` tool that runs bash commands in your workspace ({workdir}). Python 3 with numpy, scipy and scikit-learn is available; you may pip install other packages. Commands time out after the given timeout (default 120 s, max {max_timeout} s); run longer jobs in the background with nohup and poll them.
 - Your scratch directory is {workdir}/scratch. Keep notes there.
 - The harness automatically compacts your context when it gets long: the conversation so far is replaced with a summary you write. Anything not written down may be lost. Maintain a handoff file, {workdir}/scratch/HANDOFF_ACTIVE.md, from which a later context can pick up the work. Append to it as you make progress.
 - Text you write as an assistant message (outside tool calls) is shown to the researcher as a progress update.
@@ -40,7 +40,7 @@ SHELL_TOOL = {
         "type": "object",
         "properties": {
             "cmd": {"type": "string", "description": "bash command"},
-            "timeout": {"type": "integer", "description": "seconds, default 120, max 900"},
+            "timeout": {"type": "integer", "description": "seconds, default 120"},
         },
         "required": ["cmd"],
     },
@@ -122,7 +122,7 @@ class Run:
 
     # ---------- tools ----------
     def run_shell(self, cmd, timeout=120):
-        timeout = max(1, min(int(timeout or 120), 900))
+        timeout = max(1, min(int(timeout or 120), self.args.max_timeout))
         try:
             p = subprocess.run(["bash", "-lc", cmd], cwd=self.work, env=self.env, capture_output=True,
                                text=True, timeout=timeout, errors="replace")
@@ -141,7 +141,7 @@ class Run:
             try:
                 r = self.client.responses.create(
                     model=self.args.model,
-                    instructions=SYSTEM.format(workdir=self.work),
+                    instructions=SYSTEM.format(workdir=self.work, max_timeout=self.args.max_timeout),
                     input=input_items,
                     previous_response_id=prev,
                     tools=[SHELL_TOOL],
@@ -238,4 +238,5 @@ if __name__ == "__main__":
     ap.add_argument("--hours", type=float, default=12)
     ap.add_argument("--compact-at", type=int, default=400_000)
     ap.add_argument("--max-input-tokens", type=int, default=60_000_000)
+    ap.add_argument("--max-timeout", type=int, default=300)
     Run(ap.parse_args()).loop()

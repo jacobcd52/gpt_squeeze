@@ -1,15 +1,22 @@
 """Emit one line per notable event across runs: squeezed notes, compactions, API errors, run ends."""
 import json
+import subprocess
+import sys
 import time
 from pathlib import Path
 
-root = Path("/home/user/runs")
+roots = [Path("/home/user/runs"), Path("/home/user/runs_do")]
+sync = Path(__file__).with_name("sync_down.py")
+tick = 0
 pos = {}
 best = {}
 first = True
 while True:
     out = []
-    for f in list(root.glob("*/writes.jsonl")) + list(root.glob("*/events.jsonl")):
+    if tick % 9 == 0:
+        subprocess.run([sys.executable, str(sync)], capture_output=True, timeout=300)
+    tick += 1
+    for f in [f for root in roots for pat in ("*/writes.jsonl", "*/events.jsonl") for f in root.glob(pat)]:
         p = pos.get(f, 0)
         with open(f) as fh:
             fh.seek(p)
