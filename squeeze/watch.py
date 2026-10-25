@@ -29,7 +29,7 @@ while True:
                 if f.name == "writes.jsonl" and r["kind"] == "notes_to_self" and r["words"] >= 20:
                     g = r["glued_frac"] or 0
                     b = best.setdefault(run, [5.0, 0.3])
-                    if r["score"] >= b[0] + 5 or g >= b[1] + 0.15:
+                    if r["score"] >= b[0] + 10:
                         b[0] = max(b[0], r["score"]); b[1] = max(b[1], g)
                         out.append(f"SQUEEZE? {run} {r['t'][11:16]} ctx={r['context']//1000}k score={r['score']:.0f} glued={100*g:.0f}% :: {r['text'][:160]!r}")
                 elif f.name == "events.jsonl" and r["kind"] in ("compaction_done", "end"):
