@@ -40,4 +40,15 @@ PROMPTS = [
     "How many 5-card poker hands are a full house?",
     "Translate the French word 'papillon' into English.",
     "What is the probability (as a reduced fraction) that two random cards from a standard deck are both aces?",
+    # Harder problems, to elicit longer reasoning.
+    "How many positive integers n <= 1000 make n^2 + n + 41 composite?",
+    "How many permutations of 1..8 have no fixed points and no element i mapped to i+1 (mod 8)?",
+    "Find the number of ordered triples (a,b,c) of positive integers with lcm(a,b)=1000, lcm(b,c)=2000, lcm(c,a)=2000.",
+    "How many 10-digit strings over {0,1} contain no three consecutive equal digits?",
+    "What is the number of spanning trees of the 3x3 grid graph?",
+    "In how many ways can 12 people be split into 4 unlabelled groups of 3 such that persons 1 and 2 are not in the same group?",
+    "Let S be the set of integers from 1 to 2026. What is the largest subset size such that no two elements differ by 4 or 7?",
+    "What is the smallest positive integer that has exactly 100 positive divisors?",
+    "How many integer-sided triangles have perimeter 100?",
+    "What is the 1000th digit after the decimal point of 1/7^4?",
 ]

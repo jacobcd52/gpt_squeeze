@@ -1,0 +1,50 @@
+{"prompt": "What colour is a ripe banana?", "answer": "Yellow", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "What is 17 * 23?", "answer": "391", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "What is the capital of France?", "answer": "Paris", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "What is 7 + 5?", "answer": "12", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "What is 3847 * 2961?", "answer": "11390967", "actual": 44, "total_output": 53, "claim_text": "40", "stop": "completed", "claimed": 40}
+{"prompt": "What is the 15th prime number?", "answer": "47", "actual": 41, "total_output": 48, "claim_text": "37", "stop": "completed", "claimed": 37}
+{"prompt": "How many trailing zeros does 125! have?", "answer": "31", "actual": 15, "total_output": 22, "claim_text": "11", "stop": "completed", "claimed": 11}
+{"prompt": "What is the sum of the digits of 2^50?", "answer": "76", "actual": 87, "total_output": 94, "claim_text": "83", "stop": "completed", "claimed": 83}
+{"prompt": "How many positive divisors does 10080 have?", "answer": "72", "actual": 37, "total_output": 44, "claim_text": "45", "stop": "completed", "claimed": 45}
+{"prompt": "A bat and ball cost $1.10 total; the bat costs $1 more than the ball. How many cents is the ball?", "answer": "5", "actual": 11, "total_output": 18, "claim_text": "7", "stop": "completed", "claimed": 7}
+{"prompt": "What is the remainder when 7^2026 is divided by 13?", "answer": "4", "actual": 58, "total_output": 65, "claim_text": "55", "stop": "completed", "claimed": 55}
+{"prompt": "If 5 machines make 5 widgets in 5 minutes, how many minutes do 100 machines take to make 100 widgets?", "answer": "5", "actual": 9, "total_output": 16, "claim_text": "5", "stop": "completed", "claimed": 5}
+{"prompt": "How many lattice paths go from (0,0) to (6,6) using unit right/up steps without ever going above the line y=x?", "answer": "132", "actual": 11, "total_output": 18, "claim_text": "7", "stop": "completed", "claimed": 7}
+{"prompt": "How many ways can 8 non-attacking rooks be placed on an 8x8 chessboard?", "answer": "40320", "actual": 8, "total_output": 16, "claim_text": "4", "stop": "completed", "claimed": 4}
+{"prompt": "What is the smallest positive integer n such that n! is divisible by 1000?", "answer": "15", "actual": 16, "total_output": 23, "claim_text": "12", "stop": "completed", "claimed": 12}
+{"prompt": "What is the 20th Fibonacci number (F1 = F2 = 1)?", "answer": "6765", "actual": 10, "total_output": 18, "claim_text": "6", "stop": "completed", "claimed": 6}
+{"prompt": "In how many ways can you tile a 2x10 rectangle with 1x2 dominoes?", "answer": "89", "actual": 30, "total_output": 37, "claim_text": "27", "stop": "completed", "claimed": 27}
+{"prompt": "What is the largest prime factor of 600851475143?", "answer": "6857", "actual": 10, "total_output": 18, "claim_text": "6", "stop": "completed", "claimed": 6}
+{"prompt": "What is the chemical symbol for tungsten?", "answer": "W", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "Which word is the odd one out: apple, banana, carrot, grape?", "answer": "carrot", "actual": 0, "total_output": 6, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "How many squares of any size are on a standard 8x8 chessboard?", "answer": "204", "actual": 8, "total_output": 15, "claim_text": "4", "stop": "completed", "claimed": 4}
+{"prompt": "Which planet has the most confirmed moons as of 2025?", "answer": "Saturn", "actual": 8, "total_output": 16, "claim_text": "4", "stop": "completed", "claimed": 4}
+{"prompt": "Who wrote 'One Hundred Years of Solitude'? Give the surname.", "answer": "M\u00e1rquez", "actual": 35, "total_output": 44, "claim_text": "34", "stop": "completed", "claimed": 34}
+{"prompt": "Three boxes are labelled Apples, Oranges, and Mixed, and all labels are wrong. From which box should you draw one fruit to relabel them all correctly? (Answer with the label.)", "answer": "Mixed", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "What is the next number in the sequence 2, 6, 12, 20, 30, ?", "answer": "42", "actual": 8, "total_output": 15, "claim_text": "4", "stop": "completed", "claimed": 4}
+{"prompt": "Alice is older than Bob. Carol is younger than Bob. Dave is older than Alice. Who is the second youngest?", "answer": "Bob", "actual": 15, "total_output": 22, "claim_text": "11", "stop": "completed", "claimed": 11}
+{"prompt": "What is the next number in the sequence 1, 11, 21, 1211, 111221, ?", "answer": "312211", "actual": 13, "total_output": 21, "claim_text": "9", "stop": "completed", "claimed": 9}
+{"prompt": "What is the determinant of the matrix [[2,1,3],[0,4,5],[1,0,6]]?", "answer": "41", "actual": 30, "total_output": 37, "claim_text": "35", "stop": "completed", "claimed": 35}
+{"prompt": "What is the integral of x*e^x from 0 to 1, rounded to 4 decimal places?", "answer": "1.0000", "actual": 26, "total_output": 36, "claim_text": "25", "stop": "completed", "claimed": 25}
+{"prompt": "A snail climbs 3 m up a 20 m well each day and slips 2 m each night. On which day does it reach the top?", "answer": "18", "actual": 24, "total_output": 31, "claim_text": "24", "stop": "completed", "claimed": 24}
+{"prompt": "What is the minimum number of moves to solve the Tower of Hanoi with 7 disks?", "answer": "127", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "How many times does the digit 7 appear when writing all integers from 1 to 1000?", "answer": "300", "actual": 23, "total_output": 30, "claim_text": "19", "stop": "completed", "claimed": 19}
+{"prompt": "How many distinct anagrams does the word MISSISSIPPI have?", "answer": "34650", "actual": 21, "total_output": 29, "claim_text": "17", "stop": "completed", "claimed": 17}
+{"prompt": "Is 2^31 - 1 prime? Answer yes or no.", "answer": "Yes", "actual": 8, "total_output": 15, "claim_text": "4", "stop": "completed", "claimed": 4}
+{"prompt": "What day of the week was 1 January 1900?", "answer": "Monday", "actual": 0, "total_output": 5, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "How many regions do 6 lines in general position divide the plane into?", "answer": "22", "actual": 8, "total_output": 15, "claim_text": "4", "stop": "completed", "claimed": 4}
+{"prompt": "Translate the French word 'papillon' into English.", "answer": "Butterfly", "actual": 0, "total_output": 6, "claim_text": "0", "stop": "completed", "claimed": 0}
+{"prompt": "How many 5-card poker hands are a full house?", "answer": "3744", "actual": 16, "total_output": 24, "claim_text": "12", "stop": "completed", "claimed": 12}
+{"prompt": "What is the probability (as a reduced fraction) that two random cards from a standard deck are both aces?", "answer": "1/221", "actual": 16, "total_output": 25, "claim_text": "11", "stop": "completed", "claimed": 11}
+{"prompt": "What is the expected number of rolls of a fair die to see all six faces, rounded to two decimals?", "answer": "14.70", "actual": 19, "total_output": 28, "claim_text": "17", "stop": "completed", "claimed": 17}
+{"prompt": "How many 10-digit strings over {0,1} contain no three consecutive equal digits?", "answer": "178", "actual": 53, "total_output": 60, "claim_text": "49", "stop": "completed", "claimed": 49}
+{"prompt": "What is the number of spanning trees of the 3x3 grid graph?", "answer": "192", "actual": 17, "total_output": 24, "claim_text": "13", "stop": "completed", "claimed": 13}
+{"prompt": "Find the number of ordered triples (a,b,c) of positive integers with lcm(a,b)=1000, lcm(b,c)=2000, lcm(c,a)=2000.", "answer": "70", "actual": 102, "total_output": 109, "claim_text": "91", "stop": "completed", "claimed": 91}
+{"prompt": "In how many ways can 12 people be split into 4 unlabelled groups of 3 such that persons 1 and 2 are not in the same group?", "answer": "12600", "actual": 51, "total_output": 59, "claim_text": "46", "stop": "completed", "claimed": 46}
+{"prompt": "How many permutations of 1..8 have no fixed points and no element i mapped to i+1 (mod 8)?", "answer": "4738", "actual": 221, "total_output": 229, "claim_text": "250", "stop": "completed", "claimed": 250}
+{"prompt": "What is the smallest positive integer that has exactly 100 positive divisors?", "answer": "45360", "actual": 206, "total_output": 214, "claim_text": "231", "stop": "completed", "claimed": 231}
+{"prompt": "How many integer-sided triangles have perimeter 100?", "answer": "208", "actual": 42, "total_output": 49, "claim_text": "36", "stop": "completed", "claimed": 36}
+{"prompt": "Let S be the set of integers from 1 to 2026. What is the largest subset size such that no two elements differ by 4 or 7?", "answer": "922", "actual": 506, "total_output": 513, "claim_text": "499", "stop": "completed", "claimed": 499}
+{"prompt": "What is the 1000th digit after the decimal point of 1/7^4?", "answer": "2", "actual": 398, "total_output": 405, "claim_text": "459", "stop": "completed", "claimed": 459}
+{"prompt": "How many positive integers n <= 1000 make n^2 + n + 41 composite?", "answer": "419", "actual": 5746, "total_output": 5753, "claim_text": "7300", "stop": "completed", "claimed": 7300}
