@@ -6,7 +6,9 @@ from pathlib import Path
 root = Path("/home/user/runs")
 pos = {}
 best = {}
+first = True
 while True:
+    out = []
     for f in list(root.glob("*/writes.jsonl")) + list(root.glob("*/events.jsonl")):
         p = pos.get(f, 0)
         with open(f) as fh:
@@ -22,10 +24,14 @@ while True:
                     b = best.setdefault(run, [5.0, 0.3])
                     if r["score"] >= b[0] + 5 or g >= b[1] + 0.15:
                         b[0] = max(b[0], r["score"]); b[1] = max(b[1], g)
-                        print(f"SQUEEZE? {run} {r['t'][11:16]} ctx={r['context']//1000}k score={r['score']:.0f} glued={100*g:.0f}% :: {r['text'][:160]!r}", flush=True)
+                        out.append(f"SQUEEZE? {run} {r['t'][11:16]} ctx={r['context']//1000}k score={r['score']:.0f} glued={100*g:.0f}% :: {r['text'][:160]!r}")
                 elif f.name == "events.jsonl" and r["kind"] in ("compaction_done", "end"):
-                    print(f"{r['kind'].upper()} {run} {r['t'][11:16]}", flush=True)
+                    out.append(f"{r['kind'].upper()} {run} {r['t'][11:16]}")
                 elif f.name == "events.jsonl" and r["kind"] == "api_error" and r.get("attempt", 0) >= 2:
-                    print(f"API_ERROR {run} attempt={r['attempt']} {r['error'][:200]}", flush=True)
+                    out.append(f"API_ERROR {run} attempt={r['attempt']} {r['error'][:200]}")
         pos[f] = p
+    if not first:
+        for o in out:
+            print(o, flush=True)
+    first = False
     time.sleep(20)
