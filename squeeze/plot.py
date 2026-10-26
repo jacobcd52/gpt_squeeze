@@ -15,18 +15,24 @@ BLUE, ORANGE, INK, MUTED, GRID = "#2a78d6", "#eb6834", "#1f1f1e", "#6b6a63", "#e
 runs = {}
 for f in sorted(glob.glob("/home/user/runs*/*/writes.jsonl")):
     rows = []
+    seg = 0
     for line in open(f):
         w = json.loads(line)
+        if w["kind"] == "compaction_summary":
+            seg += 1
+            continue
         if "handoff" not in w["path"].lower() or w["words"] < 20:
             continue
         words_only = w["words"] - w["glued_numbers"]
         rows.append({
+            "seg": seg,
             "ctx": w["context"] / 1000,
             "num": 100 * w["glued_numbers"] / w["numbers"] if w["numbers"] >= 5 else None,
             "word": 100 * (w["missing"] - w["glued_numbers"]) / max(words_only, 1),
         })
     if rows:
         runs[Path(f).parent.name] = rows
+dead = {Path(f).parent.name for f in glob.glob("/home/user/runs*/*/agent.out") if "Traceback" in open(f).read()[-3000:]}
 order = sorted(runs, key=lambda r: -max(x["word"] for x in runs[r]))
 
 
@@ -38,12 +44,21 @@ def figure(xkey, xlabel, fname):
     for ax, run in zip(axes.flat, order):
         rows = runs[run]
         xs = list(range(1, len(rows) + 1)) if xkey == "idx" else [r["ctx"] for r in rows]
-        nx = [x for x, r in zip(xs, rows) if r["num"] is not None]
-        ny = [r["num"] for r in rows if r["num"] is not None]
-        ax.plot(nx, ny, color=BLUE, lw=2, marker="o", ms=4, label="numbers glued to a word (% of numbers)")
-        ax.plot(xs, [r["word"] for r in rows], color=ORANGE, lw=2, marker="o", ms=4,
-                label="fused words (missing spaces per 100 words, numbers excluded)")
-        ax.set_title(run.replace("astra_", "local ").replace("do1_", "droplet "), fontsize=10, color=INK, loc="left")
+        for seg in sorted({r["seg"] for r in rows}):
+            idx = [i for i, r in enumerate(rows) if r["seg"] == seg]
+            style = dict(lw=2, marker="o", ms=4, ls="-" if seg == 0 else "--", mfc=None if seg == 0 else "white")
+            nx = [xs[i] for i in idx if rows[i]["num"] is not None]
+            ny = [rows[i]["num"] for i in idx if rows[i]["num"] is not None]
+            ax.plot(nx, ny, color=BLUE, label="numbers glued to a word (% of numbers)" if seg == 0 else None, **style)
+            ax.plot([xs[i] for i in idx], [rows[i]["word"] for i in idx], color=ORANGE,
+                    label="fused words (missing spaces per 100 words, numbers excluded)" if seg == 0 else None, **style)
+            if seg > 0 and xkey == "idx":
+                ax.axvline(xs[idx[0]] - 0.5, color=MUTED, lw=1, ls=":")
+                ax.text(xs[idx[0]] - 0.3, 98, "compaction", fontsize=7, color=MUTED, va="top")
+        title = run.replace("astra_", "local ").replace("do1_", "droplet1 ").replace("do2_", "droplet2 ")
+        if run in dead:
+            title += " (died at 400k)"
+        ax.set_title(title, fontsize=10, color=INK, loc="left")
         ax.set_ylim(-3, 103)
         ax.grid(color=GRID, lw=0.8)
         ax.set_axisbelow(True)
@@ -62,7 +77,7 @@ def figure(xkey, xlabel, fname):
         ax.set_xlabel(xlabel, color=MUTED, fontsize=9)
     h, l = axes[0, 0].get_legend_handles_labels()
     fig.legend(h, l, loc="upper left", ncol=2, frameon=False, fontsize=10, bbox_to_anchor=(0.01, 1.0))
-    fig.suptitle("Squeezing in each Astra run's handoff file, per write", x=0.01, y=1.04, ha="left", fontsize=13, color=INK)
+    fig.suptitle("Squeezing in each Astra run's handoff file, per write (dashed, hollow = after a context compaction)", x=0.01, y=1.04, ha="left", fontsize=13, color=INK)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig.savefig(out / fname, dpi=130, bbox_inches="tight", facecolor="white")
 
