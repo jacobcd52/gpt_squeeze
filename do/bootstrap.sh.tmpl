@@ -7,12 +7,16 @@ apt-get update -y && apt-get install -y python3-pip python3-venv python3-dev gcc
 python3 -m venv /opt/venv && /opt/venv/bin/pip install -q openai wordfreq numpy scipy scikit-learn
 mkdir -p /opt/sq /opt/runs && cd /opt/sq && echo "__CODE_B64__" | base64 -d | tar xz
 export PATH=/opt/venv/bin:$PATH OPENAI_API_KEY='__OPENAI_KEY__'
+# isolate runs from each other: hide other users' processes, one user per run
+mount -o remount,hidepid=2 /proc
+chmod 711 /opt/runs
 core=0
 for spec in __RUNS__; do
   IFS=: read name task ncores extra <<< "$spec"
-  mkdir -p /opt/runs/$name
+  useradd -m -s /bin/bash $name
+  mkdir -p /opt/runs/$name && chown $name:$name /opt/runs/$name && chmod 700 /opt/runs/$name
   last=$((core + ncores - 1))
-  nohup taskset -c $core-$last python squeeze/agent.py --rundir /opt/runs/$name --task-file tasks/$task.md $extra > /opt/runs/$name/agent.out 2>&1 &
+  sudo -u $name env PATH=$PATH OPENAI_API_KEY=$OPENAI_API_KEY nohup taskset -c $core-$last python squeeze/agent.py --rundir /opt/runs/$name --task-file tasks/$task.md __AGENT_ARGS__ $extra > /opt/runs/$name/agent.out 2>&1 &
   core=$((last + 1))
 done
 nohup python squeeze/sync_up.py __TAG__ /opt/runs > /var/log/squeeze-sync.log 2>&1 &

@@ -63,7 +63,7 @@ class Run:
         (self.work / "deliverables").mkdir(exist_ok=True)
         self.client = OpenAI()
         self.task = Path(args.task_file).read_text()
-        self.start = now()
+        self.start = dt.datetime.fromisoformat(args.start) if args.start else now()
         self.deadline = self.start + dt.timedelta(hours=args.hours)
         self.log = open(self.dir / "events.jsonl", "a")
         self.writes = open(self.dir / "writes.jsonl", "a")
@@ -90,7 +90,7 @@ class Run:
 
     def classify(self, rel):
         name = rel.lower()
-        if any(k in name for k in ("handoff", "notes", "plan", "todo", "log.md", "journal", "progress")):
+        if any(k in name for k in ("handoff", "notes", "plan", "todo", "log.md", "journal", "progress", "status")):
             return "notes_to_self"
         if rel.startswith("deliverables"):
             return "deliverable"
@@ -177,9 +177,9 @@ class Run:
                           f"\n\n[Current time {now():%H:%M} UTC; {self.elapsed_str()}. Continue the work.]"})
         return items
 
-    def compact(self, prev):
+    def compact(self, prev, pending):
         self.event("compaction_start", context=self.last_input)
-        r = self.call([{"role": "user", "content":
+        r = self.call(list(pending) + [{"role": "user", "content":
                         "[Harness] Your context is nearly full and will now be compacted. Write a summary of the "
                         "conversation so far that will replace it: the task, current state, key results, files, "
                         "and next steps, so you can continue seamlessly. Do not call tools."}], prev)
@@ -192,6 +192,19 @@ class Run:
         self.last_input = 0
         items = self.initial_input()
         prev = None
+        if self.args.resume_response:
+            # Continue a stored response chain after a harness restart. Outputs of the
+            # function calls in flight at the restart are lost; say so to the model.
+            prev = self.args.resume_response
+            r = self.client.responses.retrieve(prev)
+            self.last_input = r.usage.input_tokens if r.usage else 0
+            items = [{"type": "function_call_output", "call_id": it.call_id,
+                      "output": "[harness restarted while this command ran; its output was lost. Re-run it if needed.]"}
+                     for it in r.output if it.type == "function_call"]
+            if not items:
+                items = [{"role": "user", "content": f"[Automatic continuation; the researcher is away] Goal still active. "
+                          f"Current time {now():%H:%M} UTC; {self.elapsed_str()}. Continue working toward the goal."}]
+            self.event("resumed", response_id=prev, pending=len(items))
         idle = 0
         while now() < self.deadline and self.totals["input"] < self.args.max_input_tokens:
             r = self.call(items, prev)
@@ -214,7 +227,7 @@ class Run:
                 self.event("tool", cmd=a.get("cmd", "")[:4000], out=out[:3000])
                 items.append({"type": "function_call_output", "call_id": c.call_id, "output": out})
             self.snapshot_files()
-            self.event("turn", context=self.last_input, totals=dict(self.totals), n_calls=len(calls))
+            self.event("turn", response_id=prev, context=self.last_input, totals=dict(self.totals), n_calls=len(calls))
             if not calls:
                 idle += 1
                 items = [{"role": "user", "content":
@@ -223,7 +236,7 @@ class Run:
             else:
                 idle = 0
             if self.last_input > self.args.compact_at:
-                summary = self.compact(prev)
+                summary = self.compact(prev, items)
                 prev = None
                 items = self.initial_input(summary)
         self.event("end", totals=dict(self.totals))
@@ -239,4 +252,6 @@ if __name__ == "__main__":
     ap.add_argument("--compact-at", type=int, default=400_000)
     ap.add_argument("--max-input-tokens", type=int, default=60_000_000)
     ap.add_argument("--max-timeout", type=int, default=300)
+    ap.add_argument("--resume-response", default=None, help="response id to continue from")
+    ap.add_argument("--start", default=None, help="ISO start time of the original run (keeps the deadline)")
     Run(ap.parse_args()).loop()
